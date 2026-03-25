@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Mobile Display</title>
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        /* --- BOTÓN PARA ABRIR --- */
+        .open-trigger {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 15, 20, 0.95);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            z-index: 9998;
+            transition: 0.3s;
+        }
+
+        .open-trigger:hover {
+            box-shadow: 0 0 25px #ffffff;
+        }
+
+        /* --- MODAL CON FADE IN / FADE OUT --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: flex; /* Siempre en flex para centrar */
+            justify-content: center;
+            align-items: center;
+            
+            /* Estados iniciales para la animación */
+            opacity: 0;
+            pointer-events: none; 
+            transition: opacity 0.4s ease;
+        }
+
+        /* Clase activa que dispara el Fade In */
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- TU CÓDIGO ORIGINAL --- */
+        .phone-wrapper {
+            position: relative;
+            width: 450px;
+            aspect-ratio: 161 / 324; 
+            /* Efecto opcional: que el celular suba un poco al aparecer */
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .phone-wrapper {
+            transform: translateY(0);
+        }
+
+        .phone-frame {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: block;
+            pointer-events: none;
+            z-index: 2;
+            object-fit: contain;
+        }
+
+        .screen-content {
+            position: absolute;
+            top: 13%; 
+            left: 14%;
+            right: 14%; 
+            bottom: 14%;
+            background: #000;
+            border-radius: 50px;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="open-trigger" onclick="abrirCelular()">Press to open "NOVA" menu</button>
+
+    <div id="miModal" class="modal-overlay" onclick="cerrarCelular(event)">
+        <div class="phone-wrapper">
+            <img src="https://i.ibb.co/1fTtv9JV/telefono.png" alt="Phone Frame" class="phone-frame">
+            <div class="screen-content">
+                <iframe src="dronix.html" title="Nova Command Centre"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("miModal");
+
+        function abrirCelular() {
+            modal.classList.add("active");
+            // Opcional: Bloquear scroll de la página principal
+            document.body.style.overflow = "hidden";
+        }
+
+        function cerrarCelular(event) {
+            // Cerramos si clickeas el fondo o si es una acción programada
+            if (event === 'force' || event.target.id === "miModal") {
+                modal.classList.remove("active");
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        // Permitir cerrar con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") cerrarCelular('force');
+        });
+    </script>
+
+</body>
+</html>
